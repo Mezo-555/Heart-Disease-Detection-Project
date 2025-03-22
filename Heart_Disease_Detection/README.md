@@ -68,13 +68,18 @@ python ml_model/predict.py
 python rule_based_system/expert_system.py
 ```
 
+### 7️⃣ Run Streamlit App
+```bash
+streamlit run ui/app.py
+```
+
 ---
 
 ## 🏆 Comparison: Decision Tree vs. Expert System
 The **Decision Tree Model** is trained using **GridSearchCV** for hyperparameter tuning, while the **Expert System** relies on predefined medical rules.
 
-🔹 **Decision Tree** → Higher accuracy, but less explainable.  
-🔹 **Expert System** → More interpretable, but may generalize poorly.  
+💡 **Decision Tree** → Higher accuracy, but less explainable.  
+💡 **Expert System** → More interpretable, but may generalize poorly.  
 
 For detailed results, see **`reports/accuracy_comparison.md`**.
 
@@ -89,9 +94,10 @@ For detailed results, see **`reports/accuracy_comparison.md`**.
 
 ## 👨‍💻 Contributors
 - **Moataz Ahmed Samir 2305223** – Developer & Researcher & Model Training & Data Preprocessing
-- **Team Member 1** – 
-- **Team Member 2** – 
+- **Team Member 1** –
+- **Team Member 2** –
 
 ---
 
 ### Github: https://github.com/Mezo-555/Heart-Disease-Detection-Project.git
+
