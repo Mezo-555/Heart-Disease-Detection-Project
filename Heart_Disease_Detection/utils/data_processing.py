@@ -1,4 +1,5 @@
 import pandas as pd
+import joblib
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
 numerical_cols = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
@@ -14,10 +15,12 @@ def handle_missing_values(df):
     df[categorical_cols] = df[categorical_cols].fillna(df[categorical_cols].mode().iloc[0])  # Fill categorical columns with mode
     return df
 
-# Normalize Numerical Features
-def normalize_features(df, numerical_cols):
+# Normalize Numerical Features & Save Scaler
+def normalize_features(df, numerical_cols, scaler_path):
     scaler = MinMaxScaler()
     df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+    joblib.dump(scaler, scaler_path)  # Save scaler for later use
+    print(f"✅ Scaler saved to {scaler_path}")
     return df
 
 # Encode Categorical Variables
@@ -37,20 +40,17 @@ def select_features(df, target_column, threshold=0.09):
     return df[selected_features]
 
 # Main Function
-def process_data(input_path, output_path):
+def process_data(input_path, output_path, scaler_path):
     df = load_dataset(input_path)
     df = handle_missing_values(df)
     numerical_cols = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
     categorical_cols = ['cp', 'restecg', 'slope', 'ca', 'thal']
-    df = normalize_features(df, numerical_cols)
-    print(df.info())
+    df = normalize_features(df, numerical_cols, scaler_path)  # Now saves the scaler
     df = encode_categorical(df, categorical_cols)
-    print(df.info())
     df = select_features(df, 'target')  # Selecting most relevant features
-    print(df.info())
     df.to_csv(output_path, index=False)
     print(f'Processed data saved to {output_path}')
 
 # Run processing if executed as a script
 if __name__ == "__main__":
-    process_data('data/heart.csv', 'data/cleaned_data.csv')
+    process_data('data/heart.csv', 'data/cleaned_data.csv', 'utils/scaler.pkl')

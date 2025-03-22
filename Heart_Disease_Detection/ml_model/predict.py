@@ -1,20 +1,41 @@
 import pandas as pd
 import joblib
+import os
+from sklearn.preprocessing import MinMaxScaler
 
-# Load Trained Model
-model = joblib.load("ml_model/decision_tree_model.pkl")
+# Define paths
+BASE_DIR = r"C:\Users\moata\Documents\Projects\Intelligent Systems\Heart_Disease_Detection"
+model_path = os.path.join(BASE_DIR, "ml_model", "decision_tree_model.pkl")
+scaler_path = os.path.join(BASE_DIR, "utils", "scaler.pkl")
 
-# Function to Make Predictions
-def predict_heart_disease(input_data):
+# Load trained model and scaler
+model = joblib.load(model_path)
+scaler = joblib.load(scaler_path) if os.path.exists(scaler_path) else MinMaxScaler()
+
+# Feature names used during training
+categorical_cols = ["sex", "cp", "fbs", "restecg", "exang", "slope", "ca", "thal"]
+numerical_cols = ["age", "trestbps", "chol", "thalach", "oldpeak"]
+
+def preprocess_input(input_data):
     df = pd.DataFrame([input_data])
     
-    # Ensure all required features are present
+    # One-Hot Encoding
+    df = pd.get_dummies(df, columns=categorical_cols)
+    
+    # Ensure all expected features are present
     expected_features = model.feature_names_in_
     for feature in expected_features:
         if feature not in df.columns:
-            df[feature] = 0  # Fill missing features with 0
+            df[feature] = 0  # Fill missing categories with 0
     df = df[expected_features]  # Align column order
     
+    # Normalize numerical features
+    df[numerical_cols] = scaler.transform(df[numerical_cols])
+    
+    return df
+
+def predict_heart_disease(input_data):
+    df = preprocess_input(input_data)
     prediction = model.predict(df)
     risk = "High Risk" if prediction[0] == 1 else "Low Risk"
     return risk
@@ -22,27 +43,19 @@ def predict_heart_disease(input_data):
 if __name__ == "__main__":
     # Example input data (modify as needed)
     example_data = {
-        "age": 0.47916666666666663,
+        "age": 50,
         "sex": 1,
-        "trestbps": 0.2924528301886792,
-        "chol": 0.1963470319634703,
-        "thalach": 0.7404580152671755,
+        "cp": 0,
+        "trestbps": 130,
+        "chol": 200,
+        "fbs": 1,
+        "restecg": 1,
+        "thalach": 150,
         "exang": 0,
-        "oldpeak": 0.16129032258064516,
-        "cp_0": 0.0,
-        "cp_1": 1.0,
-        "cp_2": 0.0,
-        "restecg_0.0": 0.0,
-        "restecg_1.0": 1.0,
-        "slope_1": 0.0,
-        "slope_2": 1.0,
-        "ca_0": 0.0,
-        "ca_1": 0.0,
-        "ca_2": 1.0,
-        "ca_3": 0.0,
-        "thal_1": 0.0,
-        "thal_2": 0.0,
-        "thal_3": 1.0
+        "oldpeak": 1.0,
+        "slope": 1,
+        "ca": 1,
+        "thal": 2
     }
     
     result = predict_heart_disease(example_data)
