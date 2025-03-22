@@ -15,10 +15,10 @@ Both the **Rule-Based Expert System** and the **Decision Tree Model** were teste
 ### 📜 **Expert System Results:**
 | Metric      | Score  |
 |------------|--------|
-| Accuracy   | 0.75   |
-| Precision  | 0.70   |
-| Recall     | 0.78   |
-| F1-Score   | 0.74   |
+| Accuracy   | 0.5132 |
+| Precision  | 0.5132 |
+| Recall     | 1.0000 |
+| F1-Score   | 0.6783 |
 
 ## 3️⃣ Key Findings
 ✅ **Decision Tree Model** achieved **higher accuracy and precision**, likely due to data-driven learning.  

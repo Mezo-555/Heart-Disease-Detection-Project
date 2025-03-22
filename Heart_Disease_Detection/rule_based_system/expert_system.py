@@ -1,4 +1,40 @@
+import pandas as pd
 from rules import HeartDiseaseRisk, HeartDiseaseExpert
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Load Test Data
+df = pd.read_csv("data/cleaned_data.csv")
+
+# Extract Features & Labels
+X_test = df.drop(columns=["target"])
+y_test = df["target"]
+
+# Initialize Expert System
+engine = HeartDiseaseExpert()
+engine.reset()
+
+# Make Predictions
+predictions = []
+for _, row in X_test.iterrows():
+    engine.reset()  # Reset engine for each case
+    engine.declare(HeartDiseaseRisk(**row.to_dict()))
+    engine.run()
+
+    # Determine risk output (assuming final risk is stored in `engine.risk_levels`)
+    predicted_risk = 1 if "high" in engine.risk_levels else 0
+    predictions.append(predicted_risk)
+
+# Calculate Metrics
+accuracy = accuracy_score(y_test, predictions)
+precision = precision_score(y_test, predictions)
+recall = recall_score(y_test, predictions)
+f1 = f1_score(y_test, predictions)
+
+# Print Results
+print(f"Expert System Accuracy: {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
+print(f"F1-Score: {f1:.4f}")
 
 # User Input Function
 def assess_risk():
@@ -26,6 +62,3 @@ def assess_risk():
     engine.run()
     engine.declare_final_risk()
     engine.run()
-
-if __name__ == "__main__":
-    assess_risk()

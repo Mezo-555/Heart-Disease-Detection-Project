@@ -88,12 +88,10 @@ For detailed results, see **`reports/accuracy_comparison.md`**.
 ---
 
 ## 👨‍💻 Contributors
-- **Your Name** – Developer & Researcher
-- **Team Member 1** – Data Preprocessing
-- **Team Member 2** – Model Training
+- **Moataz Ahmed Samir 2305223** – Developer & Researcher & Model Training & Data Preprocessing
+- **Team Member 1** – 
+- **Team Member 2** – 
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License.
-
+### Github: https://github.com/Mezo-555/Heart-Disease-Detection-Project.git
